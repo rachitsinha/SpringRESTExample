@@ -35,7 +35,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public String updateUserById(String id, User user) {
-		return this.updateUserById(id, user);
+		return this.userDao.updateUserById(id, user);
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 }

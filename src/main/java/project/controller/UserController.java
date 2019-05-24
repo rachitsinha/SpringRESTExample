@@ -2,6 +2,8 @@ package project.controller;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.model.RequestModel;
 import project.model.User;
 import project.service.UserService;
-import project.service.UserServiceImpl;
 
 @RequestMapping(value= "/userservice")
 @RestController
@@ -20,7 +22,8 @@ public class UserController {
 	UserService userService;
 	
 	public UserController() {
-		this.userService = new UserServiceImpl();
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+		this.userService = (UserService) context.getBean("userService");
 	}
 	
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
@@ -49,14 +52,24 @@ public class UserController {
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteUser(@RequestBody String id) {
-		return this.userService.deleteUserById(id);
+	public String deleteUser(@RequestBody RequestModel request) {
+		return this.userService.deleteUserById(request.getUid());
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateUser(@RequestBody User user) {
 		return this.userService.updateUserById(user.getUid(), user);
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	@ResponseBody
+	public List<User> searchUser(@RequestBody RequestModel request) {
+		return this.userService.searchUser(request.getSearchText());
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 	
 	
