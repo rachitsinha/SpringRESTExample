@@ -2,29 +2,23 @@ package project.controller;
 
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import project.model.RequestModel;
 import project.model.User;
 import project.service.UserService;
 
+@Controller
 @RequestMapping(value= "/userservice")
-@RestController
 public class UserController {
-	UserService userService;
 	
-	public UserController() {
-		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-		this.userService = (UserService) context.getBean("userService");
-	}
+	private UserService userService;
 	
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	@ResponseBody
